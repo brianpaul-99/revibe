@@ -1,0 +1,95 @@
+.form {
+  display: grid;
+  gap: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: grid;
+  gap: 10px;
+}
+
+.field span {
+  font-size: 0.84rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(25, 25, 25, 0.6);
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border: 1px solid rgba(25, 25, 25, 0.1);
+  border-radius: 18px;
+  background: rgba(247, 247, 242, 0.9);
+  padding: 15px 16px;
+  font: inherit;
+  color: #191919;
+  resize: vertical;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: rgba(165, 183, 0, 0.8);
+  box-shadow: 0 0 0 4px rgba(165, 183, 0, 0.14);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.submit {
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 22px;
+  background: #191919;
+  color: #f7f7f2;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.submit:hover {
+  transform: translateY(-1px);
+}
+
+.submit:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.helpText,
+.success,
+.error {
+  font-size: 0.95rem;
+}
+
+.helpText {
+  color: rgba(25, 25, 25, 0.62);
+}
+
+.success {
+  color: #317a2e;
+}
+
+.error {
+  color: #b83232;
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
