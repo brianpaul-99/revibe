@@ -19,6 +19,7 @@ export default function ContactForm() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
 
     setStatus("sending");
     setErrorMessage("");
@@ -39,7 +40,7 @@ export default function ContactForm() {
 
       setStatus("success");
       setFormState(initialState);
-      event.currentTarget.reset();
+      form.reset();
     } catch (error) {
       const message = error instanceof Error ? error.message : "Something went wrong while sending your message.";
 
