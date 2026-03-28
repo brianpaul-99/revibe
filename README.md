@@ -13,14 +13,23 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Contact form setup
 
-The contact section works without a backend.
+The contact section now posts to an in-project Next.js API route at `/api/contact`.
 
-- If `NEXT_PUBLIC_CONTACT_FORM_ENDPOINT` is not set, the form falls back to the default mail app.
-- If you connect a hosted form provider like Formspree, set the endpoint in `.env.local`.
+- If `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, and `CONTACT_FROM_EMAIL` are configured, the backend sends email through Resend.
+- If those server env vars are missing, the form will return a server-side configuration error instead of exposing an email address in the client.
 
 Start from [.env.example](./.env.example):
 
 ```bash
-NEXT_PUBLIC_CONTACT_EMAIL=hello@revibe.ca
-NEXT_PUBLIC_CONTACT_FORM_ENDPOINT=
+RESEND_API_KEY=
+CONTACT_TO_EMAIL=
+CONTACT_FROM_EMAIL=Revibe Contact <onboarding@resend.dev>
 ```
+
+## Vercel setup
+
+Add these environment variables in your Vercel project settings:
+
+- `RESEND_API_KEY`
+- `CONTACT_TO_EMAIL`
+- `CONTACT_FROM_EMAIL`

@@ -3,9 +3,6 @@
 import { FormEvent, useState } from "react";
 import styles from "./ContactForm.module.css";
 
-const endpoint = process.env.NEXT_PUBLIC_CONTACT_FORM_ENDPOINT;
-const fallbackEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@revibe.ca";
-
 const initialState = {
   firstName: "",
   lastName: "",
@@ -23,45 +20,31 @@ export default function ContactForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!endpoint) {
-      const subject = encodeURIComponent(`New Revibe inquiry from ${formState.firstName} ${formState.lastName}`.trim());
-      const body = encodeURIComponent(
-        [
-          `Name: ${formState.firstName} ${formState.lastName}`.trim(),
-          `Email: ${formState.email}`,
-          `Phone: ${formState.phone || "Not provided"}`,
-          `Company: ${formState.company || "Not provided"}`,
-          "",
-          formState.message
-        ].join("\n")
-      );
-
-      window.location.href = `mailto:${fallbackEmail}?subject=${subject}&body=${body}`;
-      return;
-    }
-
     setStatus("sending");
     setErrorMessage("");
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
-          Accept: "application/json"
+          "Content-Type": "application/json"
         },
-        body: new FormData(event.currentTarget)
+        body: JSON.stringify(formState)
       });
 
       if (!response.ok) {
-        throw new Error("The form service rejected the request.");
+        const result = (await response.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(result?.error || "The form service rejected the request.");
       }
 
       setStatus("success");
       setFormState(initialState);
       event.currentTarget.reset();
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Something went wrong while sending your message.";
+
       setStatus("error");
-      setErrorMessage(error instanceof Error ? error.message : "Something went wrong while sending your message.");
+      setErrorMessage(message);
     }
   }
 
@@ -138,18 +121,13 @@ export default function ContactForm() {
           onChange={(event) => setFormState((current) => ({ ...current, message: event.target.value }))}
         />
       </label>
-
-      <input type="hidden" name="_subject" value="New Revibe website inquiry" />
-
       <div className={styles.footer}>
         <button className={styles.submit} type="submit" disabled={status === "sending"}>
           {status === "sending" ? "Sending..." : "Send inquiry"}
         </button>
 
         <p className={styles.helpText}>
-          {endpoint
-            ? "This form is wired for your hosted email service."
-            : `No email endpoint is configured yet, so this will open your mail app to ${fallbackEmail}.`}
+          The form submits to this app&apos;s backend route. No contact email is exposed in the client.
         </p>
       </div>
 
