@@ -70,12 +70,13 @@
   display: grid;
   align-items: end;
   padding: 72px 0 56px;
+  scroll-margin-top: 104px;
 }
 
 .heroGrid {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 48px;
+  grid-template-columns: 1fr;
+  gap: 32px;
 }
 
 .heroCopy {
@@ -121,6 +122,11 @@
   gap: 14px;
 }
 
+.heroLocation {
+  font-size: 1.1rem;
+  color: rgba(25, 25, 25, 0.62);
+}
+
 .primaryButton,
 .secondaryButton,
 .smallButton {
@@ -153,13 +159,6 @@
   background: rgba(255, 255, 255, 0.4);
 }
 
-.heroMeta {
-  display: grid;
-  align-content: end;
-  gap: 28px;
-}
-
-.heroCard,
 .aboutCard,
 .serviceList,
 .pricingCard,
@@ -170,41 +169,13 @@
   box-shadow: 0 30px 70px rgba(25, 25, 25, 0.08);
 }
 
-.heroCard {
-  border-radius: 36px;
-  min-height: 340px;
-  padding: 34px;
-  display: grid;
-  align-content: space-between;
-}
-
-.heroCardLabel {
-  font-size: 0.8rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(25, 25, 25, 0.55);
-}
-
-.heroCardTitle {
-  font-size: clamp(2.8rem, 6vw, 5.2rem);
-  line-height: 0.92;
-  letter-spacing: -0.06em;
-}
-
-.heroServices {
-  justify-self: end;
-  text-align: right;
-  font-size: 1.5rem;
-  line-height: 1.15;
-}
-
-.heroLocation {
-  justify-self: end;
-  font-size: 1.4rem;
-}
-
 .section {
   padding: 48px 0 120px;
+  scroll-margin-top: 104px;
+}
+
+.compactAnchor {
+  scroll-margin-top: 52px;
 }
 
 .sectionHeading {
@@ -250,6 +221,8 @@
   padding: 11px 18px;
   background: #d6ea1c;
   color: #191919;
+  justify-self: start;
+  align-self: start;
 }
 
 .aboutVisual {
@@ -287,6 +260,7 @@
 
 .servicesWrap {
   padding: 0 0 120px;
+  scroll-margin-top: 104px;
 }
 
 .servicesHeader {
@@ -484,10 +458,6 @@
     min-height: auto;
     padding-top: 40px;
   }
-
-  .heroMeta {
-    order: -1;
-  }
 }
 
 @media (max-width: 720px) {
@@ -510,14 +480,14 @@
     padding-bottom: 84px;
   }
 
-  .heroServices,
-  .heroLocation {
-    justify-self: start;
-    text-align: left;
+  .hero,
+  .section,
+  .servicesWrap {
+    scroll-margin-top: 124px;
   }
 
-  .heroCard {
-    min-height: 280px;
+  .compactAnchor {
+    scroll-margin-top: 82px;
   }
 
   .serviceItem {

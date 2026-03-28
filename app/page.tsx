@@ -23,21 +23,6 @@ export default function HomePage() {
     }
   ];
 
-  const services = [
-    {
-      title: "Specialized SEO Marketing",
-      description: "Keyword strategy, local SEO, technical audits, and content systems built to grow the right traffic."
-    },
-    {
-      title: "Web Development",
-      description: "Fast, conversion-ready websites that make your brand feel sharper and easier to trust."
-    },
-    {
-      title: "Email Marketing",
-      description: "Lifecycle campaigns and nurturing flows that keep your leads warm long after the first click."
-    }
-  ];
-
   return (
     <div className={styles.page}>
       <header className={styles.nav}>
@@ -82,28 +67,13 @@ export default function HomePage() {
                     View pricing
                   </a>
                 </div>
-              </div>
-
-              <div className={styles.heroMeta}>
-                <div className={styles.heroCard}>
-                  <p className={styles.heroCardLabel}>SEO agency</p>
-                  <h2 className={styles.heroCardTitle}>Company Name</h2>
-                  <p className={styles.heroServices}>
-                    SEO specialization
-                    <br />
-                    Web design
-                    <br />
-                    Digital marketing
-                  </p>
-                </div>
-
                 <p className={styles.heroLocation}>Based in Toronto</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section className={styles.section} id="about">
+        <section className={`${styles.section} ${styles.compactAnchor}`} id="about">
           <div className="container">
             <h2 className={styles.sectionHeading}>About us</h2>
             <p className={styles.sectionLead}>
@@ -138,23 +108,23 @@ export default function HomePage() {
                 <br />
                 Email marketing
               </h2>
-              <a className={styles.secondaryButton} href="#contact">
+              <a className={styles.smallButton} href="#contact">
                 Get in touch
               </a>
             </div>
 
-            <div className={styles.serviceList}>
+            {/* <div className={styles.serviceList}>
               {services.map((service) => (
                 <article className={styles.serviceItem} key={service.title}>
                   <strong>{service.title}</strong>
                   <span>{service.description}</span>
                 </article>
               ))}
-            </div>
+            </div> */}
           </div>
         </section>
 
-        <section className={styles.section} id="pricing">
+        <section className={`${styles.section} ${styles.compactAnchor}`} id="pricing">
           <div className="container">
             <div className={styles.pricingHeader}>
               <div>
@@ -194,7 +164,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className={styles.section} id="contact">
+        <section className={`${styles.section} ${styles.compactAnchor}`} id="contact">
           <div className="container">
             <div className={styles.contactGrid}>
               <aside className={styles.contactDetails}>
