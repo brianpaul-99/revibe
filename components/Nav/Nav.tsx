@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useDeviceSize } from '@/hooks/useDeviceSize';
 import styles from './Nav.module.css';
 
 const LogoSvg = ({ className }: { className?: string }) => (
@@ -54,6 +55,7 @@ type NavProps = {
 export default function Nav({ showInsights = true }: NavProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { isDesktop } = useDeviceSize();
   const navLinks = showInsights
     ? NAV_LINKS
     : NAV_LINKS.filter(({ href }) => href !== '#blog');
@@ -68,6 +70,12 @@ export default function Nav({ showInsights = true }: NavProps) {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
+
+  useEffect(() => {
+    if (isDesktop && menuOpen) {
+      setMenuOpen(false);
+    }
+  }, [isDesktop, menuOpen]);
 
   const closeMenu = () => setMenuOpen(false);
 
