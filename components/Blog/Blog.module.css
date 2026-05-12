@@ -4,6 +4,20 @@
   border-top: 1px solid var(--ash);
 }
 
+.devNote {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  border: 1px dashed rgba(233, 255, 0, 0.45);
+  border-radius: 999px;
+  font-family: var(--body);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--yellow);
+  background: rgba(233, 255, 0, 0.08);
+}
+
 .headlineRow {
   display: flex;
   justify-content: space-between;
@@ -162,6 +176,12 @@
 @media (max-width: 768px) {
   .section {
     padding: 60px 20px;
+  }
+
+  .devNote {
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    font-size: 11px;
   }
 
   .headlineRow {

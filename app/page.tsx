@@ -12,10 +12,12 @@ import Contact from '@/components/Contact/Contact';
 import Footer from '@/components/Footer/Footer';
 
 export default function Home() {
+  const showInsights = process.env.NODE_ENV === 'development';
+
   return (
     <>
       <ProgressBar />
-      <Nav />
+      <Nav showInsights={showInsights} />
       <main>
         <HeroScroll />
         <About />
@@ -24,7 +26,8 @@ export default function Home() {
         <Founder />
         <Process />
         <FAQ />
-        <Blog />
+        {/* Insights stays local-only until production content is ready. */}
+        {showInsights ? <Blog /> : null}
         <Contact />
       </main>
       <Footer />

@@ -47,9 +47,16 @@ const NAV_LINKS = [
   { href: '#contact', label: 'Contact' },
 ];
 
-export default function Nav() {
+type NavProps = {
+  showInsights?: boolean;
+};
+
+export default function Nav({ showInsights = true }: NavProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navLinks = showInsights
+    ? NAV_LINKS
+    : NAV_LINKS.filter(({ href }) => href !== '#blog');
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -72,7 +79,7 @@ export default function Nav() {
         </a>
 
         <div className={styles.desktopLinks} aria-label="Section navigation">
-          {NAV_LINKS.map(({ href, label }) => (
+          {navLinks.map(({ href, label }) => (
             <a key={href} href={href} className={styles.desktopLink}>
               {label}
             </a>
@@ -97,7 +104,7 @@ export default function Nav() {
       >
         <div className={styles.overlayInner}>
           <nav className={styles.overlayLinks} aria-label="Site navigation">
-            {NAV_LINKS.map(({ href, label }) => (
+            {navLinks.map(({ href, label }) => (
               <a
                 key={href}
                 href={href}

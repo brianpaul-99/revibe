@@ -31,6 +31,9 @@ const POSTS = [
 export default function Blog() {
   return (
     <section id="blog" className={styles.section}>
+      <div className={styles.devNote}>
+        Local preview only. This Insights section is hidden outside development until production content is ready.
+      </div>
       <div className={styles.headlineRow}>
         <div>
           <h2 className={styles.headline}>Latest Insights</h2>
