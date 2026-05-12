@@ -1,0 +1,147 @@
+.section {
+  background: var(--studio-black);
+  padding: 80px 48px;
+  border-top: 1px solid var(--ash);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 30fr 70fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.leftCol {
+  position: sticky;
+  top: 100px;
+}
+
+.headline {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(52px, 7vw, 88px);
+  line-height: 0.9;
+  color: var(--bone);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 20px;
+}
+
+.sub {
+  font-family: var(--body);
+  font-size: 14px;
+  color: var(--slate);
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.ctaPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--void);
+  background: var(--yellow);
+  padding: 12px 22px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.ctaPill:hover {
+  opacity: 0.88;
+}
+
+.accordionList {
+  border-top: 1px solid var(--ash);
+  list-style: none;
+}
+
+.accordionItem {
+  border-bottom: 1px solid var(--ash);
+  padding: 20px 0;
+  position: relative;
+  cursor: default;
+  transition: background 0.15s;
+}
+
+.accordionItem:hover {
+  background: rgba(244, 244, 242, 0.02);
+}
+
+.accordionHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.accNum {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--yellow);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.accTitle {
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--bone);
+  margin-bottom: 6px;
+}
+
+.accDesc {
+  font-family: var(--body);
+  font-size: 13px;
+  color: var(--slate);
+  line-height: 1.6;
+}
+
+.accArrow {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  font-size: 16px;
+  color: var(--yellow);
+  transform: rotate(0deg);
+  line-height: 1;
+}
+
+@media (max-width: 1024px) {
+  .section {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 60px 20px;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .leftCol {
+    position: static;
+  }
+
+  .headline {
+    font-size: clamp(48px, 12vw, 80px);
+  }
+}

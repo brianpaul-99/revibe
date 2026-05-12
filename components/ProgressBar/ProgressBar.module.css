@@ -1,0 +1,10 @@
+.bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--yellow);
+  z-index: 9999;
+  transition: width 0.08s linear;
+  pointer-events: none;
+}
