@@ -80,6 +80,16 @@
   margin-top: 20px;
   padding-top: 20px;
   border-top: 1px solid var(--ash);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.person {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
 }
 
 .name {
@@ -135,5 +145,9 @@
 
   .pullquote {
     font-size: clamp(32px, 7vw, 52px);
+  }
+
+  .attribution {
+    flex-direction: column;
   }
 }

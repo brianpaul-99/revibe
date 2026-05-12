@@ -46,8 +46,14 @@ export default function Founder() {
             the process around it.
           </p>
           <div className={styles.attribution}>
-            <div className={styles.name}>Timothy Limpin</div>
-            <div className={styles.title}>Co-Founder and CEO</div>
+            <div className={styles.person}>
+              <div className={styles.name}>Timothy Limpin</div>
+              <div className={styles.title}>Co-Founder & CEO</div>
+            </div>
+            <div className={styles.person}>
+              <div className={styles.name}>Brian Paul</div>
+              <div className={styles.title}>Co-Founder & CTO</div>
+            </div>
           </div>
         </div>
       </div>
