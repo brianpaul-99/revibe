@@ -101,6 +101,7 @@
   border-radius: 999px;
   background: transparent;
   animation: founderFloat 5.5s ease-in-out infinite;
+  border: 1px solid rgba(244, 244, 242, 0.1);
 }
 
 .portraitFallback {
@@ -111,9 +112,10 @@
 }
 
 .portrait {
-  object-fit: contain;
-  object-position: center bottom;
+  object-fit: cover;
+  object-position: center 18%;
   filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.35));
+  transform: scale(1.08);
 }
 
 .person {
