@@ -1,0 +1,349 @@
+.section {
+  background: var(--studio-black);
+  padding: 80px 48px;
+  border-top: 1px solid var(--ash);
+}
+
+.sectionTag {
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  margin-bottom: 20px;
+  display: block;
+}
+
+.headline {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(64px, 10vw, 128px);
+  line-height: 0.9;
+  color: var(--bone);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.sub {
+  font-family: var(--body);
+  font-size: 15px;
+  color: var(--slate);
+  margin-bottom: 40px;
+}
+
+/* Featured card */
+.featuredCard {
+  width: 100%;
+  height: auto;
+  min-height: 380px;
+  background: var(--onyx);
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.featuredCard:hover {
+  border-color: var(--slate);
+}
+
+.featuredCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(12, 12, 14, 0.9) 0%, transparent 50%);
+  z-index: 1;
+}
+
+.cardNoise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  z-index: 0;
+}
+
+.cardGridLines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(244, 244, 242, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 244, 242, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+}
+
+.cardInner {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.featuredInner {
+  position: absolute;
+  inset: 0;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cardBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.cardPill {
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--slate);
+  border: 1px solid var(--ash);
+  padding: 4px 10px;
+  border-radius: 2px;
+}
+
+.cardPillYellow {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+
+.priceTag {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--yellow);
+  letter-spacing: -0.01em;
+}
+
+.priceTagSm {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--yellow);
+}
+
+.priceTagSmMuted {
+  color: var(--slate);
+}
+
+.priceUnit {
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--slate);
+  letter-spacing: 0;
+}
+
+.pricingFeatures {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pricingFeaturesSmall {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.packageName {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(36px, 4vw, 56px);
+  color: var(--bone);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.pricingDesc {
+  font-family: var(--body);
+  font-size: 14px;
+  color: var(--slate);
+  line-height: 1.6;
+  max-width: 520px;
+  margin-bottom: 16px;
+}
+
+.pricingDescSmall {
+  font-family: var(--body);
+  font-size: 12px;
+  color: var(--slate);
+  line-height: 1.5;
+}
+
+.pricingList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pricingList li {
+  font-family: var(--body);
+  font-size: 13px;
+  color: var(--bone);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.pricingList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--yellow);
+  font-size: 11px;
+  top: 1px;
+}
+
+.pricingListSmall li {
+  font-size: 12px;
+}
+
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--void);
+  background: var(--yellow);
+  padding: 12px 24px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.ctaBtn:hover {
+  opacity: 0.88;
+}
+
+.ctaBtnSm {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--void);
+  background: var(--yellow);
+  padding: 9px 18px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: opacity 0.2s, background 0.2s, color 0.2s;
+}
+
+.ctaBtnSm:hover {
+  opacity: 0.88;
+}
+
+.ctaBtnOutline {
+  background: transparent;
+  color: var(--yellow);
+  border: 1px solid var(--yellow);
+}
+
+.ctaBtnOutline:hover {
+  background: var(--yellow);
+  color: var(--void);
+  opacity: 1;
+}
+
+.cardArrow {
+  font-size: 28px;
+  color: var(--yellow);
+  line-height: 1;
+}
+
+/* Small cards grid */
+.smallCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.smallCard {
+  height: auto;
+  min-height: 260px;
+  background: var(--onyx);
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.smallCard:hover {
+  border-color: var(--slate);
+}
+
+.smallCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(12, 12, 14, 0.88) 0%, transparent 55%);
+  z-index: 1;
+}
+
+.smallCard .cardInner {
+  position: absolute;
+  inset: 0;
+  padding: 18px;
+}
+
+.customCard {
+  border-style: dashed !important;
+}
+
+@media (max-width: 1024px) {
+  .section {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .smallCards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 60px 20px;
+  }
+
+  .headline {
+    font-size: clamp(48px, 12vw, 80px);
+  }
+
+  .smallCards {
+    grid-template-columns: 1fr;
+  }
+
+  .featuredCard {
+    min-height: 300px;
+  }
+}
