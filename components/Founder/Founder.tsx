@@ -1,3 +1,7 @@
+'use client';
+
+import Image from 'next/image';
+import { useState } from 'react';
 import styles from './Founder.module.css';
 
 type BarCls = 'b1'|'b2'|'b3'|'b4'|'b5'|'b6'|'b7'|'b8'|'b9'|'g1'|'g2'|'g3'|'g4';
@@ -46,17 +50,54 @@ export default function Founder() {
             the process around it.
           </p>
           <div className={styles.attribution}>
-            <div className={styles.person}>
-              <div className={styles.name}>Timothy Limpin</div>
-              <div className={styles.title}>Co-Founder & CEO</div>
-            </div>
-            <div className={styles.person}>
-              <div className={styles.name}>Brian Paul</div>
-              <div className={styles.title}>Co-Founder & CTO</div>
-            </div>
+            <FounderProfile
+              name="Timothy Limpin"
+              title="Co-Founder & CEO"
+              imgSrc="/timothy-cartoon.png"
+             
+            />
+            <FounderProfile
+              name="Brian Paul"
+              title="Co-Founder & CTO"
+              imgSrc="/brian-cartoon.png"
+      
+            />  
+          
           </div>
         </div>
       </div>
     </section>
   );
 }
+
+
+const ProfilePic = ({ src, alt="" }: { src: string; alt?: string }) => {
+  const [hasError, setHasError] = useState(false);
+
+  return (
+    <div className={styles.portraitCol}>
+      <div className={`${styles.portraitFrame} ${hasError ? styles.portraitFallback : ''}`}>
+        {!hasError ? (
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            className={styles.portrait}
+            sizes="(max-width: 768px) 120px, 140px"
+            onError={() => setHasError(true)}
+          />
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+const FounderProfile = ({ name, title, imgSrc}: { name: string; title: string; imgSrc: string; }) => (
+  <div className={styles.person}>
+    <ProfilePic src={imgSrc} />
+    <div className={styles.personCopy}>
+      <div className={styles.name}>{name}</div>
+      <div className={styles.title}>{title}</div>
+    </div>
+  </div>
+)
