@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,9 +9,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <Script id="mcjs" strategy="afterInteractive">
-        {`!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/6deb180605f5cf7299cf390c1/63ab1868d22ece9f27a67ba95.js");`}
-      </Script>
+      <head>
+        <script
+          id="mcjs"
+          dangerouslySetInnerHTML={{
+            __html:
+              '!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/6deb180605f5cf7299cf390c1/63ab1868d22ece9f27a67ba95.js");'
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
