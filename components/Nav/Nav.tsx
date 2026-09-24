@@ -109,6 +109,7 @@ export default function Nav({ showInsights = true }: NavProps) {
       <div
         className={`${styles.overlay} ${menuOpen ? styles.overlayOpen : ''}`}
         aria-hidden={!menuOpen}
+        inert={!menuOpen ? true : undefined}
       >
         <div className={styles.overlayInner}>
           <nav className={styles.overlayLinks} aria-label="Site navigation">
