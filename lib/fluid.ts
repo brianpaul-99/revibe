@@ -307,7 +307,9 @@ export function initFluid(): () => void {
   on(window, 'scroll', () => { const y = window.scrollY; scrollKick += y - lastScroll; lastScroll = y; }, { passive: true });
 
   /* ---------------- loop ---------------- */
+  const IDLE_RESET_MS = 1500;
   let dead = false, textOn = false, running = false, visible = true, last = 0, lastInput = 0, simT = 0, frameN = 0;
+  let rafId = 0, suspendedAt = 0;
   const hudF = hero.querySelector('.hud-f');
   // ink nozzles that keep the field alive when nobody is touching it
   const nozzles = [
@@ -316,10 +318,48 @@ export function initFluid(): () => void {
   ];
   const nozzlePos = (n, t) => [.5 + n.ax * Math.sin(t * n.fx * Math.PI * 2 + n.px), .5 + n.ay * Math.sin(t * n.fy * Math.PI * 2 + n.py)];
 
+  function clearTarget(t) {
+    if (!t) return;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, t.fbo);
+    gl.viewport(0, 0, t.w, t.h);
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+  }
+
+  // A suspended tab can retain a queued animation frame. Reset the GPU state and
+  // input deltas before resuming so that wake-up never creates a second loop or a
+  // giant fluid impulse.
+  function resetAfterIdle(now = performance.now()) {
+    if (!vel || !dye) return;
+    [vel.read, vel.write, dye.read, dye.write, divg, curlT, pres && pres.read, pres && pres.write].forEach(clearTarget);
+    pointer.moved = false;
+    pointer.seen = false;
+    bursts.length = 0;
+    scrollKick = 0;
+    lastScroll = window.scrollY;
+    simT = 0;
+    frameN = 0;
+    boilIx = -1;
+    lastInput = now;
+    if (textOn) {
+      introT0 = now;
+      introDone = false;
+      drawMask(now);
+    }
+    burst(.68, .55, 1.25);
+    render(now, textOn);
+  }
+
+  function scheduleFrame() {
+    if (running && !rafId) rafId = requestAnimationFrame(frame);
+  }
+
   function frame(now) {
+    rafId = 0;
     if (!running) return;
-    requestAnimationFrame(frame);
-    const dt = Math.min((now - last) / 1000, 1 / 30); last = now;
+    const gap = now - last;
+    if (gap > IDLE_RESET_MS) resetAfterIdle(now);
+    const dt = gap > IDLE_RESET_MS ? 1 / 60 : Math.min(Math.max(gap / 1000, 1 / 240), 1 / 30); last = now;
     if (size() && textOn) { drawMask(now); introDone = false; }
     simT += dt;
 
@@ -368,13 +408,35 @@ export function initFluid(): () => void {
     render(now, textOn);
 
     if (++frameN % 5 === 0 && hudF) hudF.textContent = 'F ' + String(Math.floor(now / 1000 * 12) % 10000).padStart(4, '0');
+    scheduleFrame();
   }
 
-  function play() { if (dead || running || !visible || document.hidden || reduced) return; running = true; last = performance.now(); requestAnimationFrame(frame); }
-  function pause() { running = false; }
+  function play() {
+    if (dead || running || !visible || document.hidden || reduced) return;
+    running = true;
+    last = performance.now();
+    scheduleFrame();
+  }
+  function pause() {
+    running = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = 0;
+    if (!suspendedAt) suspendedAt = performance.now();
+  }
+  function wake(forceReset = false) {
+    const now = performance.now();
+    const idleFor = suspendedAt ? now - suspendedAt : now - last;
+    if (forceReset || idleFor > IDLE_RESET_MS) resetAfterIdle(now);
+    suspendedAt = 0;
+    if (running) last = now;
+    else play();
+  }
 
   IO(([e]) => { visible = e.isIntersecting; visible ? play() : pause(); }, { threshold: 0 }).observe(hero);
-  on(document, 'visibilitychange', () => (document.hidden ? pause() : play()));
+  on(document, 'visibilitychange', () => (document.hidden ? pause() : wake()));
+  on(window, 'pagehide', pause);
+  on(window, 'pageshow', e => wake(e.persisted));
+  on(window, 'focus', () => wake());
   let rT; on(window, 'resize', () => { clearTimeout(rT); rT = setTimeout(() => { if (!running) { size(); if (textOn) drawMask(performance.now()); render(performance.now(), textOn); } else if (textOn) drawMask(performance.now()); }, 120); });
 
   const fonts = document.fonts ? Promise.race([document.fonts.load(`400 100px ${getComputedStyle(title).fontFamily}`), new Promise(r => setTimeout(r, 1200))]) : Promise.resolve();
@@ -400,5 +462,5 @@ export function initFluid(): () => void {
     start();
   });
 
-  return () => { dead = true; running = false; clearTimeout(rT); ac.abort(); observers.forEach(o => o.disconnect()); };
+  return () => { dead = true; pause(); clearTimeout(rT); ac.abort(); observers.forEach(o => o.disconnect()); };
 }
