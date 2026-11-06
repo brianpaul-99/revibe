@@ -1,35 +1,31 @@
-# Revibe
+# Revibe website (2026)
 
-Marketing site for Revibe built with Next.js, React, and TypeScript.
-
-## Run locally
+Next.js 16 (App Router) + React 19. One page, prerendered as static HTML, plus one server route for the contact form.
 
 ```bash
 npm install
-npm run dev
+npm run dev      # http://localhost:3000
+npm run build && npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+## Where things live
 
-## Contact form setup
+- `app/page.tsx` is all the page markup. Copy edits happen here.
+- `app/globals.css` holds the brand tokens (palette, Bebas Neue + Inter via `next/font`, motion timings) and every section's styles.
+- `components/SiteMotion.tsx` is the only client component. It starts the two runtimes below and tears them down on unmount.
+- `lib/fluid.ts` is the hero: a WebGL2 fluid sim printed through a halftone screen. Falls back to a static hero without WebGL2.
+- `lib/motion.ts` covers scroll reveals, starbursts, the three service animations, the Truchet field, the FAQ, the form, and the 3D skull.
+- `lib/skull3d.ts` is the faceted 3D skull, copied from `Branding/Motion/src/skull3d.js`.
+- `lib/skullFrames.ts` is not used by the site, but is retained for compatibility with the existing branding build workflow.
+- `public/brian-cartoon.png` and `public/timothy-cartoon.png` are the founder portraits shown in the studio section.
+- `app/layout.tsx` retains the existing Mailchimp connected-site script alongside the site's metadata.
 
-The contact section now posts to an in-project Next.js API route at `/api/contact`.
+## Contact form
 
-- If `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, and `CONTACT_FROM_EMAIL` are configured, the backend sends email through Resend.
-- If those server env vars are missing, the form will return a server-side configuration error instead of exposing an email address in the client.
-
-Start from [.env.example](./.env.example):
-
-```bash
-RESEND_API_KEY=
-CONTACT_TO_EMAIL=
-CONTACT_FROM_EMAIL=Revibe Contact <onboarding@resend.dev>
-```
-
-## Vercel setup
-
-Add these environment variables in your Vercel project settings:
+`app/api/contact/route.ts` emails each enquiry through [Resend](https://resend.com). Copy `.env.example` to `.env.local` (or set the same variables on your host):
 
 - `RESEND_API_KEY`
-- `CONTACT_TO_EMAIL`
-- `CONTACT_FROM_EMAIL`
+- `CONTACT_TO_EMAIL` (comma-separate to send to both founders)
+- `CONTACT_FROM_EMAIL` (optional; a sender on a domain verified in Resend)
+
+Without them the route answers 503 and the visitor sees "That didn't send", never a false success.
