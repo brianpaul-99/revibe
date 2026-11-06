@@ -27,13 +27,44 @@ export function initMotion(): () => void {
 
   /* ---------------- one ticker for everything ---------------- */
   const tasks = new Set();
-  let ticking = false;
-  function tick(now) {
+  const IDLE_GAP_MS = 1500;
+  let ticking = false, rafId = 0, lastReal = 0, suspendedAt = 0, timeOffset = 0;
+  const animationNow = () => performance.now() - timeOffset;
+  function tick(realNow) {
+    rafId = 0;
     if (!tasks.size) { ticking = false; return; }
+    if (lastReal && realNow - lastReal > IDLE_GAP_MS) timeOffset += realNow - lastReal;
+    lastReal = realNow;
+    const now = realNow - timeOffset;
     for (const t of tasks) { try { t(now); } catch (e) { tasks.delete(t); console.error(e); } }
-    requestAnimationFrame(tick);
+    if (tasks.size && !document.hidden) rafId = requestAnimationFrame(tick);
+    else ticking = false;
   }
-  function addTask(fn) { tasks.add(fn); if (!ticking) { ticking = true; requestAnimationFrame(tick); } return () => tasks.delete(fn); }
+  function startTicker() {
+    if (ticking || !tasks.size || document.hidden) return;
+    ticking = true;
+    lastReal = performance.now();
+    rafId = requestAnimationFrame(tick);
+  }
+  function pauseTicker() {
+    ticking = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = 0;
+    if (!suspendedAt) suspendedAt = performance.now();
+  }
+  function resumeTicker() {
+    const now = performance.now();
+    if (suspendedAt) timeOffset += Math.max(0, now - suspendedAt);
+    else if (lastReal && now - lastReal > IDLE_GAP_MS) timeOffset += now - lastReal;
+    suspendedAt = 0;
+    lastReal = now;
+    startTicker();
+  }
+  function addTask(fn) { tasks.add(fn); startTicker(); return () => tasks.delete(fn); }
+  on(document, 'visibilitychange', () => (document.hidden ? pauseTicker() : resumeTicker()));
+  on(window, 'pagehide', pauseTicker);
+  on(window, 'pageshow', resumeTicker);
+  on(window, 'focus', resumeTicker);
   const onTwos = now => Math.floor(now / (1000 / 12));
   const boilIx = now => Math.floor(now / 125); // 8 drawings a second, the library's boil rate
 
@@ -132,7 +163,7 @@ export function initMotion(): () => void {
     if (reduced) return;
     els.forEach(el => (el.textContent = ''));
     const go = () => {
-      const t0 = performance.now() + 900;
+      const t0 = animationNow() + 900;
       const stop = addTask(now => {
         let done = true;
         els.forEach((el, i) => {
@@ -158,7 +189,7 @@ export function initMotion(): () => void {
 
     function count(el) {
       const to = +el.dataset.count; if (reduced || to === 0) { el.textContent = to; return; }
-      const t0 = performance.now(), dur = 750;
+      const t0 = animationNow(), dur = 750;
       el.textContent = '0';
       const stop = addTask(now => {
         const k = clamp((now - t0) / dur);
@@ -238,7 +269,7 @@ export function initMotion(): () => void {
     RO(resize).observe(canvas); resize();
     const paint = t => { ctx.setTransform(dpr, 0, 0, dpr, 0, 0); draw(ctx, t, W, H); };
     if (reduced) { const still = () => paint(loop ? loop * 0.8 : 6); RO(still).observe(canvas); document.fonts && document.fonts.ready.then(still); return; }
-    watch(canvas, v => { vis = v; if (v && t0 === null) t0 = performance.now(); }, { threshold: 0.25 });
+    watch(canvas, v => { vis = v; if (v && t0 === null) t0 = animationNow(); }, { threshold: 0.25 });
     addTask(now => {
       if (!vis || !W) return;
       let t = (now - t0) / 1000; if (loop) t %= loop;
@@ -494,7 +525,7 @@ export function initMotion(): () => void {
     let wave = null;
     watch(sec, v => (vis = v));
     on(sec, 'pointermove', e => {
-      const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, now = performance.now();
+      const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, now = animationNow();
       const i = Math.floor(x / s), j = Math.floor(y / s);
       for (const tl of tiles) if (Math.abs(tl.i - i) <= 1 && Math.abs(tl.j - j) <= 1 && (tl.i === i || tl.j === j)) flip(tl, now);
     }, { passive: true });
@@ -552,7 +583,7 @@ export function initMotion(): () => void {
       const r = stage.getBoundingClientRect();
       aimX = clamp((e.clientX - (r.left + r.width / 2)) / 500, -1, 1);
       aimY = clamp((e.clientY - (r.top + r.height / 2)) / 500, -1, 1);
-      lastAim = performance.now();
+      lastAim = animationNow();
     }, { passive: true });
     watch(stage, v => (vis = v));
     addTask(now => {
@@ -597,5 +628,5 @@ export function initMotion(): () => void {
     });
   })();
 
-  return () => { tasks.clear(); ac.abort(); observers.forEach(o => o.disconnect()); };
+  return () => { pauseTicker(); tasks.clear(); ac.abort(); observers.forEach(o => o.disconnect()); };
 }
